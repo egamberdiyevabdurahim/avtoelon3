@@ -10,7 +10,7 @@ class User(AbstractUser):
     ]
 
     status = models.CharField(max_length=30, choices=STATUS, default='User')
-    phone = models.CharField(max_length=14),
+    phone = models.CharField(max_length=14, null=True, blank=True)
     photo = models.ImageField(upload_to='user_photos/')
 
     def __str__(self):

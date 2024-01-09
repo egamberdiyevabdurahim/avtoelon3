@@ -408,9 +408,11 @@ class AvtoApiList(APIView):
 class AvtoApiDetail(APIView):
     parser_classes = [MultiPartParser, JSONParser]
     def get(self, request, id):
-        avto = Avto.objects.get(id=id)
-        ser = AvtoSer(avto)
-        return Response(ser.data)
+        if Avto.objects.filter(id=id).exists():
+            avto = Avto.objects.get(id=id)
+            ser = AvtoSer(avto)
+            return Response(ser.data)
+        return Response(Avto.objects.none())
 
     def delete(self, request, id):
         avto = Avto.objects.get(id=id)
