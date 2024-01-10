@@ -22,3 +22,32 @@ class SignUp(APIView):
             ser.save()
             return Response(ser.data)
         return Response(ser.errors)
+
+
+class Change(APIView):
+    parser_classes = (MultiPartParser, JSONParser)
+    def get(self, request, id):
+        user = User.objects.filter(id=id).first()
+        ser = UserSer(user)
+        return Response(ser.data)
+
+    def delete(self, request, id):
+        user = User.objects.filter(id=id).first()
+        user.delete()
+        return Response({'message': 'User successfully deleted'})
+
+    def put(self, request, id):
+        user = User.objects.filter(id=id).first()
+        ser = UserSer(data=request.data, instance=user)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data)
+        return Response(ser.errors)
+
+    def patch(self, request, id):
+        user = User.objects.filter(id=id).first()
+        ser = UserSer(data=request.data, instance=user, partial=True)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data)
+        return Response(ser.errors)
