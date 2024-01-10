@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, JSONParser
 
@@ -51,3 +53,13 @@ class Change(APIView):
             ser.save()
             return Response(ser.data)
         return Response(ser.errors)
+
+
+class Login(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = User.objects.get(username=username)
+        token = Token.objects.create(user=user)
+        id = user.id
+        return Response({'token': token.key, 'id':id})

@@ -4,10 +4,12 @@ from .models import User
 
 
 class UserSer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=16, write_only=True)
     class Meta:
         model = User
         fields = ['id', 'username', 'password', 'email', 'status', 'phone', 'photo']
-        read_only_fields = ['password']
+        # write_only_fields = ['password']
+        # extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = super().create(self.validated_data)
@@ -24,6 +26,6 @@ class UserSer(serializers.ModelSerializer):
         # if not instance.password.check_password(validated_data['old_password']):
         #     raise serializers
         instance.password = validated_data.get('password', instance.password)
-        instance.set_password(validated_data.pop('password', None))
+        instance.set_password(validated_data.pop('password'))
         instance.save()
         return instance
