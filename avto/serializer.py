@@ -1,6 +1,13 @@
 from rest_framework import serializers
 
-from avto.models import Davlat, Viloyat, Shahar, Model, Rusum, Karobka, Rang, Yeyishi, Photo, Avto
+from avto.models import (Davlat, Viloyat, Shahar, Model, Rusum,
+                         Karobka, Rang, Yeyishi, Photo, Avto)
+
+
+# class ViewedAvtoSer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ViewedAvto
+#         fields = ['id', 'viewed_list']
 
 
 class DavlatSer(serializers.ModelSerializer):
@@ -62,6 +69,12 @@ class AvtoSer(serializers.ModelSerializer):
         model = Avto
         fields = '__all__'
         read_only_fields = ['photo']
+
+    def validate_yili(self, value):
+        if len(value)==4:
+            return value
+        else:
+            raise serializers.ValidationError({'error': 'Mashinaning Yili Oxiri 4ta belgidan utmaydi'})
 
 
 class AvtoGetSer(serializers.ModelSerializer):

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.mail import send_mail
 
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -6,6 +7,7 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, JSONParser
 
+from django.conf import settings
 from .models import User
 from .serializer import UserSer
 
@@ -17,11 +19,17 @@ class SignUp(APIView):
         ser = UserSer(user, many=True)
         return Response({'data': ser.data})
 
-
     def post(self, request):
+        #send sms via email
         ser = UserSer(data=request.data)
         if ser.is_valid():
-            ser.save()
+            user = ser.save()
+            send_mail(
+                'subject',
+                'text',
+                settings.EMAIL_HOST_USER,
+                [user.email, ]
+            )
             return Response(ser.data)
         return Response(ser.errors)
 

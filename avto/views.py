@@ -4,8 +4,42 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, JSONParser
 
-from .models import Davlat, Viloyat, Shahar, Model, Rusum, Karobka, Rang, Yeyishi, Photo, Avto
-from .serializer import DavlatSer, ViloyatSer, ShaharSer, ModelSer, RusumSer, KarobkaSer, RangSer, YeyishiSer, PhotoSer, AvtoSer, AvtoGetSer
+from User.models import User
+from User.serializer import UserSer
+from .models import (Davlat, Viloyat, Shahar, Model, Rusum, Karobka, Rang,
+    Yeyishi, Photo, Avto)
+from .serializer import (DavlatSer, ViloyatSer, ShaharSer, ModelSer, RusumSer,
+                         KarobkaSer, RangSer, YeyishiSer, PhotoSer, AvtoSer,
+                         AvtoGetSer)
+
+
+class AllApiList(APIView):
+    def get(self, request):
+        davlat = Davlat.objects.all()
+        viloyat = Viloyat.objects.all()
+        shahar = Shahar.objects.all()
+        model = Model.objects.all()
+        rusum = Rusum.objects.all()
+        karobka = Karobka.objects.all()
+        rang = Rang.objects.all()
+        yeyishi = Yeyishi.objects.all()
+        photo = Photo.objects.all()
+        avto = Avto.objects.all()
+        user = User.objects.all()
+        davlatser = DavlatSer(davlat, many=True)
+        viloyatser = ViloyatSer(viloyat, many=True)
+        shaharser = ShaharSer(shahar, many=True)
+        modelser = ModelSer(model, many=True)
+        rusumser = RusumSer(rusum, many=True)
+        karobkaser = KarobkaSer(karobka, many=True)
+        rangser = RangSer(rang, many=True)
+        yeyishiser = YeyishiSer(yeyishi, many=True)
+        photoser = PhotoSer(photo, many=True)
+        avtoser = AvtoSer(avto, many=True)
+        userser = UserSer(user, many=True)
+        return Response((davlatser.data, viloyatser.data, shaharser.data,
+            modelser.data, rusumser.data, karobkaser.data, rangser.data,
+            yeyishiser.data, photoser.data, avtoser.data, userser.data))
 
 
 class DavlatApiList(APIView):
@@ -408,11 +442,12 @@ class AvtoApiList(APIView):
 class AvtoApiDetail(APIView):
     parser_classes = [MultiPartParser, JSONParser]
     def get(self, request, id):
-        if Avto.objects.filter(id=id).exists():
+        try:
             avto = Avto.objects.get(id=id)
             ser = AvtoSer(avto)
             return Response(ser.data)
-        return Response(Avto.objects.none())
+        except:
+            return Response({'error': 'Bunday Mashina Mavjud Emas'})
 
     def delete(self, request, id):
         avto = Avto.objects.get(id=id)

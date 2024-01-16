@@ -29,3 +29,10 @@ class UserSer(serializers.ModelSerializer):
         instance.set_password(validated_data.pop('password'))
         instance.save()
         return instance
+
+    def validate_username(self, value):
+        username = value.lower()
+        if User.objects.filter(username__contains=username).exists():
+            raise serializers.ValidationError({'error': 'Bunday Username Allaqachon Mavjud Iltimos Boshqa Username Kiriting'})
+        return username
+

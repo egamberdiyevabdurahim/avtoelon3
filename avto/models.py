@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 
 from User.models import User
 
@@ -66,6 +68,15 @@ class Photo(models.Model):
     photo = models.ImageField(upload_to='Avto_photo/')
 
 
+# class ViewedAvto(models.Model):
+#     viewed_list = models.IntegerField(default=0)
+
+# @reciever(post_save, sender=ViewedAvto)
+# def create_viewedavto(sender, instance, created=False, **s):
+
+
+
+
 class Avto(models.Model):
     XOLATSTATUS = [
         ('Avtosalon', 'Avtosalon'),
@@ -78,7 +89,7 @@ class Avto(models.Model):
     ]
     model = models.ForeignKey(Model, on_delete=models.CASCADE, related_name='avto_modeli', verbose_name='Modeli')
     rusum = models.ForeignKey(Rusum, on_delete=models.CASCADE, related_name='avto_rusumi', verbose_name='Rusumi')
-    yili = models.CharField(max_length=4, verbose_name='Yili')
+    yili = models.IntegerField(verbose_name='Yili')
     savdolashuv = models.CharField(max_length=99, choices=SAVSTATUS, default='Yoq')
     photo = models.ManyToManyField(Photo, verbose_name='Rasm')
     xolati = models.CharField(max_length=99, choices=XOLATSTATUS, default='Ishlagan')
