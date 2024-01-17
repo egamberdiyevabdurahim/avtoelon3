@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from avto.models import (Davlat, Viloyat, Shahar, Model, Rusum,
-                         Karobka, Rang, Yeyishi, Photo, Avto)
+                        Photo, Avto)
 
 
 # class ViewedAvtoSer(serializers.ModelSerializer):
@@ -40,24 +40,6 @@ class RusumSer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class KarobkaSer(serializers.ModelSerializer):
-    class Meta:
-        model = Karobka
-        fields = '__all__'
-
-
-class RangSer(serializers.ModelSerializer):
-    class Meta:
-        model = Rang
-        fields = '__all__'
-
-
-class YeyishiSer(serializers.ModelSerializer):
-    class Meta:
-        model = Yeyishi
-        fields = '__all__'
-
-
 class PhotoSer(serializers.ModelSerializer):
     class Meta:
         model = Photo
@@ -81,11 +63,11 @@ class AvtoGetSer(serializers.ModelSerializer):
     model = ModelSer()
     rusum = RusumSer()
     photo = PhotoSer(many=True)
-    yeyishi = YeyishiSer()
-    karobka = KarobkaSer()
-    rang = RangSer()
     shahar = ShaharSer()
 
     class Meta:
         model = Avto
-        fields = ['id', 'model', 'rusum', 'yili', 'savdolashuv', 'photo', 'xolati', 'yeyishi', 'karobka', 'rang', 'kraska_holati', 'shahar', 'narhi', 'dvigatel', 'user', 'data', 'yana']
+        fields = ['id', 'model', 'rusum', 'yili', 'savdolashuv', 'yurgani',
+        'uzatma', 'photo', 'xolati', 'yeyishi', 'karobka', 'rang',
+        'kraska_holati', 'shahar', 'narhi', 'valyuta', 'dvigatel',
+        'user', 'data', 'yana']

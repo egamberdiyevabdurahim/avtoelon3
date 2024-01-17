@@ -25,8 +25,8 @@ class SignUp(APIView):
         if ser.is_valid():
             user = ser.save()
             send_mail(
-                'subject',
-                'text',
+                'Avto Elon Uz',
+                'Assalomu Aleykum Avto Elon Uz Saytiga Obuna Bo\'lganingizdan minnatdormiz Xurmat Va Extirom Bilan Avto Elon Uz Jamoasi',
                 settings.EMAIL_HOST_USER,
                 [user.email, ]
             )

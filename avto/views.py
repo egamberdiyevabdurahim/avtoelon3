@@ -6,11 +6,10 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from User.models import User
 from User.serializer import UserSer
-from .models import (Davlat, Viloyat, Shahar, Model, Rusum, Karobka, Rang,
-    Yeyishi, Photo, Avto)
+from .models import (Davlat, Viloyat, Shahar, Model, Rusum, Photo, Avto)
 from .serializer import (DavlatSer, ViloyatSer, ShaharSer, ModelSer, RusumSer,
-                         KarobkaSer, RangSer, YeyishiSer, PhotoSer, AvtoSer,
-                         AvtoGetSer)
+                        PhotoSer, AvtoSer,
+                        AvtoGetSer)
 
 
 class AllApiList(APIView):
@@ -20,9 +19,6 @@ class AllApiList(APIView):
         shahar = Shahar.objects.all()
         model = Model.objects.all()
         rusum = Rusum.objects.all()
-        karobka = Karobka.objects.all()
-        rang = Rang.objects.all()
-        yeyishi = Yeyishi.objects.all()
         photo = Photo.objects.all()
         avto = Avto.objects.all()
         user = User.objects.all()
@@ -31,15 +27,11 @@ class AllApiList(APIView):
         shaharser = ShaharSer(shahar, many=True)
         modelser = ModelSer(model, many=True)
         rusumser = RusumSer(rusum, many=True)
-        karobkaser = KarobkaSer(karobka, many=True)
-        rangser = RangSer(rang, many=True)
-        yeyishiser = YeyishiSer(yeyishi, many=True)
         photoser = PhotoSer(photo, many=True)
         avtoser = AvtoSer(avto, many=True)
         userser = UserSer(user, many=True)
         return Response((davlatser.data, viloyatser.data, shaharser.data,
-            modelser.data, rusumser.data, karobkaser.data, rangser.data,
-            yeyishiser.data, photoser.data, avtoser.data, userser.data))
+            modelser.data, rusumser.data, photoser.data, avtoser.data, userser.data))
 
 
 class DavlatApiList(APIView):
@@ -246,132 +238,6 @@ class RusumApiDetail(APIView):
     def patch(self, request, id):
         davlat = Rusum.objects.get(id=id)
         ser = RusumSer(data=request.data, instance=davlat, partial=True)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-
-class KarobkaApiList(APIView):
-    def get(self, request):
-        davlat = Karobka.objects.all()
-        ser = KarobkaSer(davlat, many=True)
-        return Response(ser.data)
-
-    def post(self, request):
-        ser = KarobkaSer(data=request.data)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-
-class KarobkaApiDetail(APIView):
-    def get(self, request, id):
-        davlat = Karobka.objects.get(id=id)
-        ser = KarobkaSer(davlat)
-        return Response(ser.data)
-
-    def delete(self, request, id):
-        davlat = Karobka.objects.get(id=id)
-        davlat.delete()
-        return Response({'message': 'deleted successfully'})
-
-    def put(self, request, id):
-        davlat = Karobka.objects.get(id=id)
-        ser = KarobkaSer(data=request.data, instance=davlat)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-    def patch(self, request, id):
-        davlat = Karobka.objects.get(id=id)
-        ser = KarobkaSer(data=request.data, instance=davlat, partial=True)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-
-class RangApiList(APIView):
-    def get(self, request):
-        davlat = Rang.objects.all()
-        ser = RangSer(davlat, many=True)
-        return Response(ser.data)
-
-    def post(self, request):
-        ser = RangSer(data=request.data)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-
-class RangApiDetail(APIView):
-    def get(self, request, id):
-        davlat = Rang.objects.get(id=id)
-        ser = RangSer(davlat)
-        return Response(ser.data)
-
-    def delete(self, request, id):
-        davlat = Rang.objects.get(id=id)
-        davlat.delete()
-        return Response({'message': 'deleted successfully'})
-
-    def put(self, request, id):
-        davlat = Rang.objects.get(id=id)
-        ser = RangSer(data=request.data, instance=davlat)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-    def patch(self, request, id):
-        davlat = Rang.objects.get(id=id)
-        ser = RangSer(data=request.data, instance=davlat, partial=True)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-
-class YeyishiApiList(APIView):
-    def get(self, request):
-        davlat = Yeyishi.objects.all()
-        ser = YeyishiSer(davlat, many=True)
-        return Response(ser.data)
-
-    def post(self, request):
-        ser = YeyishiSer(data=request.data)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-
-class YeyishiApiDetail(APIView):
-    def get(self, request, id):
-        davlat = Yeyishi.objects.get(id=id)
-        ser = YeyishiSer(davlat)
-        return Response(ser.data)
-
-    def delete(self, request, id):
-        davlat = Yeyishi.objects.get(id=id)
-        davlat.delete()
-        return Response({'message': 'deleted successfully'})
-
-    def put(self, request, id):
-        davlat = Yeyishi.objects.get(id=id)
-        ser = YeyishiSer(data=request.data, instance=davlat)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data)
-        return Response(ser.errors)
-
-    def patch(self, request, id):
-        davlat = Yeyishi.objects.get(id=id)
-        ser = YeyishiSer(data=request.data, instance=davlat, partial=True)
         if ser.is_valid():
             ser.save()
             return Response(ser.data)
