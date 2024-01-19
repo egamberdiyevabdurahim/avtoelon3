@@ -310,6 +310,8 @@ class AvtoApiDetail(APIView):
     def get(self, request, id):
         try:
             avto = Avto.objects.get(id=id)
+            avto.viewed_list = avto.viewed_list+0
+            avto.sum_of_vieved_list()
             ser = AvtoSer(avto)
             return Response(ser.data)
         except:

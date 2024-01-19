@@ -152,11 +152,15 @@ class Avto(models.Model):
     dvigatel = models.CharField(max_length=3, verbose_name='Dvigatel Hajmi')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='avto_user', verbose_name='User')
     data = models.DateField(auto_now_add=True)
+    viewed_list = models.IntegerField(default=0)
     yana = models.TextField(verbose_name=f'qushimcha', null=True, blank=True)
 
     # @property
     # def sum_of_likes(self):
     #     return self.likes.user.count()
+    def sum_of_vieved_list(self, *args, **kwargs):
+        self.viewed_list = self.viewed_list+1
+        super(Avto, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.rusum}/{self.narhi}/{self.shahar}'
