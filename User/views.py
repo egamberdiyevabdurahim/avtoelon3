@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
+from django.conf import settings
 
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -7,8 +8,8 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, JSONParser
 
-from django.conf import settings
 from .models import User
+from avto.models import Like, Avto
 from .serializer import UserSer
 
 
@@ -71,3 +72,24 @@ class Login(APIView):
         token = Token.objects.create(user=user)
         id = user.id
         return Response({'token': token.key, 'id':id})
+
+
+class LikeAvto(APIView):
+	def get(self, request, id):
+		pass
+
+	def post(self, request, id):
+		avto = Avto.objects.get(id=id)
+		like = Like.objects.filter(avto=avto).first()
+		if Like.objects.filter(avto=avto).exists():
+			like = Like.objects.filter(avto=avto).first()
+			if request.user in like.user.all():
+				like.user.remove(request.user)
+				return Response({'deleted':'successfully'})
+			like.user.add(request.user)
+			return Response({'added':'successfully'})
+		like = Like.objects.create(
+				avto=avto
+			)
+		like.user.add(request.user)
+		return Response({'added':'successfully'})

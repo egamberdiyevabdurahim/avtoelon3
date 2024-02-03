@@ -6,8 +6,8 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from User.models import User
 from User.serializer import UserSer
-from .models import (Davlat, Viloyat, Shahar, Model, Rusum, Photo, Avto)
-from .serializer import (DavlatSer, ViloyatSer, ShaharSer, ModelSer, RusumSer,
+from .models import (Model, Rusum, Photo, Avto)
+from .serializer import (ModelSer, RusumSer,
                         PhotoSer, AvtoSer,
                         AvtoGetSer)
 

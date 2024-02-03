@@ -6,27 +6,27 @@ from django.utils.text import slugify
 from User.models import User
 
 
-class Davlat(models.Model):
-    name = models.CharField(max_length=50)
+# class Davlat(models.Model):
+#     name = models.CharField(max_length=50)
 
-    def __str__(self):
-        return self.name
-
-
-class Viloyat(models.Model):
-    name = models.CharField(max_length=50)
-    davlat = models.ForeignKey(Davlat, on_delete=models.CASCADE, related_name='viloyatlar')
-
-    def __str__(self):
-        return f'{self.davlat}/{self.name}'
+#     def __str__(self):
+#         return self.name
 
 
-class Shahar(models.Model):
-    name = models.CharField(max_length=50)
-    viloyat = models.ForeignKey(Viloyat, on_delete=models.CASCADE, related_name='shaharlar')
+# class Viloyat(models.Model):
+#     name = models.CharField(max_length=50)
+#     davlat = models.ForeignKey(Davlat, on_delete=models.CASCADE, related_name='viloyatlar')
 
-    def __str__(self):
-        return f'{self.viloyat}/{self.name}'
+#     def __str__(self):
+#         return f'{self.davlat}/{self.name}'
+
+
+# class Shahar(models.Model):
+#     name = models.CharField(max_length=50)
+#     viloyat = models.ForeignKey(Viloyat, on_delete=models.CASCADE, related_name='shaharlar')
+
+#     def __str__(self):
+#         return f'{self.viloyat}/{self.name}'
 
 
 class Model(models.Model):
@@ -58,6 +58,38 @@ class Photo(models.Model):
 
 
 class Avto(models.Model):
+    VILOYATSTATUS = [
+        ('Andijon', 'Andijon'),
+        ('Buxoro', 'Buxoro'),
+        ('Fargona', 'Fargʻona'),
+        ('Jizzax', 'Jizzax'),
+        ('Xorazm', 'Xorazm'),
+        ('Namangan', 'Namangan'),
+        ('Navoiy', 'Navoiy'),
+        ('Qashqadaryo', 'Qashqadaryo'),
+        ('Qoraqalpog', 'Qoraqalpogʻiston Respublikasi'),
+        ('Samarqand', 'Samarqand'),
+        ('Sirdaryo', 'Sirdaryo'),
+        ('Surxondaryo', 'Surxondaryo'),
+        ('Toshkent', 'Toshkent'),
+    ]
+
+    # SHAHARSTATUS = [
+    #     ('Andijon', 'Andijon'),
+    #     ('Buxoro', 'Buxoro'),
+    #     ('Fargona', 'Fargʻona'),
+    #     ('Jizzax', 'Jizzax'),
+    #     ('Xorazm', 'Xorazm'),
+    #     ('Namangan', 'Namangan'),
+    #     ('Navoiy', 'Navoiy'),
+    #     ('Qashqadaryo', 'Qashqadaryo'),
+    #     ('Qoraqalpog', 'Qoraqalpogʻiston Respublikasi'),
+    #     ('Samarqand', 'Samarqand'),
+    #     ('Sirdaryo', 'Sirdaryo'),
+    #     ('Surxondaryo', 'Surxondaryo'),
+    #     ('Toshkent', 'Toshkent'),
+    # ]
+
     XOLATSTATUS = [
         ('Avtosalon', 'Avtosalon'),
         ('Ishlagan', 'Ishlagan'),
@@ -146,24 +178,25 @@ class Avto(models.Model):
     karobka = models.CharField(max_length=50, choices=Uzatish_qutisi, verbose_name='Karobka')
     rang = models.CharField(max_length=50, choices=Rang, verbose_name='Rangi')
     kraska_holati = models.CharField(max_length=50, choices=Kraska_Holati, verbose_name='Kraska Holati')
-    shahar = models.ForeignKey(Shahar, on_delete=models.CASCADE, related_name='avto_shahari', verbose_name='Shahar')
+    viloyat = models.CharField(max_length=30, choices=VILOYATSTATUS, null=True)
+    manzil = models.TextField(null=True)
     narhi = models.IntegerField(verbose_name='Narhi')
     valyuta = models.CharField(max_length=5, choices=Valyuta, default='UZS')
     dvigatel = models.CharField(max_length=3, verbose_name='Dvigatel Hajmi')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='avto_user', verbose_name='User')
     data = models.DateField(auto_now_add=True)
     viewed_list = models.IntegerField(default=0)
-    yana = models.TextField(verbose_name=f'qushimcha', null=True, blank=True)
+    yana = models.TextField(verbose_name=f'qo\'shimcha', null=True, blank=True)
 
-    # @property
-    # def sum_of_likes(self):
-    #     return self.likes.user.count()
+    @property
+    def sum_of_likes(self):
+        return self.likes.user.count()
     def sum_of_vieved_list(self, *args, **kwargs):
         self.viewed_list = self.viewed_list+1
         super(Avto, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.rusum}/{self.narhi}/{self.shahar}'
+        return f'{self.rusum}/{self.narhi}/{self.viloyat}'
 
 
 class Like(models.Model):

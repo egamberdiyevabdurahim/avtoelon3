@@ -8,6 +8,6 @@ urlpatterns = [
     path('', AvtoApiList.as_view(), name='AvtoApiList'),
     path('<int:id>/', AvtoApiDetail.as_view(), name='AvtoApiDetail'),
     path('photo/', include('avto.photo_urls')),
-    path('davlat/', include('avto.davlat_urls')),
+    # path('davlat/', include('avto.davlat_urls')),
     path('model/', include('avto.model_urls')),
 ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from avto.models import (Davlat, Viloyat, Shahar, Model, Rusum,
+from avto.models import (Model, Rusum,
                         Photo, Avto)
 
 
@@ -10,22 +10,22 @@ from avto.models import (Davlat, Viloyat, Shahar, Model, Rusum,
 #         fields = ['id', 'viewed_list']
 
 
-class DavlatSer(serializers.ModelSerializer):
-    class Meta:
-        model = Davlat
-        fields = '__all__'
+# class DavlatSer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Davlat
+#         fields = '__all__'
 
 
-class ViloyatSer(serializers.ModelSerializer):
-    class Meta:
-        model = Viloyat
-        fields = '__all__'
+# class ViloyatSer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Viloyat
+#         fields = '__all__'
 
 
-class ShaharSer(serializers.ModelSerializer):
-    class Meta:
-        model = Shahar
-        fields = '__all__'
+# class ShaharSer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Shahar
+#         fields = '__all__'
 
 
 class ModelSer(serializers.ModelSerializer):
@@ -52,22 +52,15 @@ class AvtoSer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['photo']
 
-    def validate_yili(self, value):
-        if len(value)==4:
-            return value
-        else:
-            raise serializers.ValidationError({'error': 'Mashinaning Yili Oxiri 4ta belgidan utmaydi'})
-
 
 class AvtoGetSer(serializers.ModelSerializer):
     model = ModelSer()
     rusum = RusumSer()
     photo = PhotoSer(many=True)
-    shahar = ShaharSer()
 
     class Meta:
         model = Avto
         fields = ['id', 'model', 'rusum', 'yili', 'savdolashuv', 'yurgani',
         'uzatma', 'photo', 'xolati', 'yeyishi', 'karobka', 'rang',
-        'kraska_holati', 'shahar', 'narhi', 'valyuta', 'dvigatel',
-        'user', 'data', 'yana']
+        'kraska_holati', 'viloyat', 'manzil', 'narhi', 'valyuta', 'dvigatel',
+        'user', 'data', 'yana', 'viewed_list']
